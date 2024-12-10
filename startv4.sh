@@ -129,17 +129,24 @@ EOL
 echo "Création du fichier Dockerfile pour le backend..."
 mkdir -p ~/myapp/backend
 cat <<EOL > ~/myapp/backend/Dockerfile
+
+
 # Utiliser l'image php:7.4-apache de base
 FROM php:7.4-apache
 
-# Installer les dépendances nécessaires pour MySQLi
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Installer les dépendances nécessaires pour MySQLi et LDAP
+RUN apt-get update && apt-get install -y \
+    libldap2-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql ldap
 
-# Activer l'extension MySQLi
-RUN docker-php-ext-enable mysqli
+# Activer l'extension MySQLi et LDAP
+RUN docker-php-ext-enable mysqli ldap
 
 # Exposer le port 80
 EXPOSE 80
+
+
+
 EOL
 
 # Naviguer dans le répertoire de l'application
