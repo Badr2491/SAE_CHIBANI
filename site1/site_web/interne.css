@@ -1,0 +1,43 @@
+
+/* Exemple de style pour l'intranet */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.welcome-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #6c63ff;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+a.btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #5743c3;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+a.btn-secondary:hover {
+    background-color: #6c63ff;
+}
