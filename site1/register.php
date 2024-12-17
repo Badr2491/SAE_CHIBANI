@@ -1,9 +1,9 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Connexion à la base de données
-    $servername = "localhost"; // Ou l'adresse de votre serveur de base de données
+    $servername = "mysql:3306"; // Ou l'adresse de votre serveur de base de données
     $usernameDB = "root"; // Nom d'utilisateur
-    $passwordDB = ""; // Pas de mot de passe
+    $passwordDB = "rootpassword"; // Pas de mot de passe
     $dbname = "bdd"; // Nom de votre base de données
 
     $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Validation du mot de passe
-    if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/\d/', $password)) {
-        echo "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule et un chiffre.";
-    } else {
+  ///  if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/\d/', $password)) {
+     //   echo "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule et un chiffre.";
+   // } else {
         // Hachage du mot de passe
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
