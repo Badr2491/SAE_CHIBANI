@@ -121,6 +121,8 @@ echo "Connexion MySQL réussie.<br>";
 if (\$ldapconn) {
     echo "Connexion LDAP réussie.<br>";
     ldap_close(\$ldapconn);
+    // < a href="register.php" > page d'enregistrement</a>
+    // attention il faut ajouter le répertoire contenant notre site dans le répertoire
 }
 ?>
 EOL
