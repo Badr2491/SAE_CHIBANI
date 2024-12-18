@@ -75,37 +75,32 @@ services:
       - mynetwork
 
   ldap:
-    image: osixia/openldap:latest
+    image: osixia/openldap:1.5.0
     container_name: ldap
     environment:
-      LDAP_ORGANISATION: "My Organization"
-      LDAP_DOMAIN: "example.com" # cn=admin,dc=example,dc=com
-      LDAP_ADMIN_PASSWORD: "adminpassword"
+      LDAP_ORGANISATION: "MyOrg"
+      LDAP_DOMAIN: "momo.com"
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: admin
     ports:
-      - "389:389"  # Port pour LDAP
-      - "636:636"  # Port pour LDAP sécurisé (LDAPS)
-    volumes:
-      - ldapData:/var/lib/ldap
-      - ldapConfig:/etc/ldap/slapd.d
+      - "389:389"
+      - "636:636"
     networks:
       - mynetwork
 
-  ldap_admin:
+  phpldapadmin:
     image: osixia/phpldapadmin:latest
     container_name: phpldapadmin
     environment:
-      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_LDAP_HOSTS: "ldap"
       PHPLDAPADMIN_HTTPS: "false"
     ports:
-      - "8082:80"  # Port pour l'interface graphique
+      - "8081:80"
     networks:
       - mynetwork
 
 volumes:
   mysql_data:
-  dbData:
-  ldapData:
-  ldapConfig:
 
 networks:
   mynetwork:
@@ -158,6 +153,23 @@ cd ~/myapp
 echo "Démarrage des services Docker..."
 sudo docker-compose up -d
 
+# Attendre quelques secondes pour s'assurer que les conteneurs sont lancés
+sleep 10
+
+# Ajouter l'utilisateur LDAP "filou"
+echo "Création de l'utilisateur LDAP 'filou'..."
+sudo docker exec -it ldap ldapadd -x -D "cn=admin,dc=momo,dc=com" -w admin -f - <<EOF
+dn: uid=filou,ou=users,dc=momo,dc=com
+objectClass: inetOrgPerson
+uid: filou
+sn: filou
+cn: filou
+userPassword: filou
+EOF
+
 # Afficher les services en cours d'exécution
 echo "Les services suivants sont en cours d'exécution :"
 sudo docker-compose ps
+
+# URL de phpLDAPadmin
+echo "phpLDAPadmin est disponible à l'adresse http://localhost:8081"
