@@ -36,30 +36,23 @@ sudo apt install docker-compose -y
 
 # Créer le répertoire de l'application
 echo "Création du répertoire de l'application..."
-mkdir -p ~/myapp/frontend
-mkdir -p ~/myapp/backend
+mkdir -p ~/myapp
 
-# Créer le fichier docker-compose.yml
+# Créer le fichier docker-compose.yml pour MySQL, phpMyAdmin, PHP, LDAP et phpLDAPadmin
 echo "Création du fichier docker-compose.yml..."
 cat <<EOL > ~/myapp/docker-compose.yml
 version: '3.8'
 
 services:
-  frontend:
-    image: nginx:latest
-    container_name: frontend
-    volumes:
-      - ./frontend:/usr/share/nginx/html
-    ports:
-      - "8080:80"
-    networks:
-      - mynetwork
-
   backend:
-    image: php:7.4-apache
+    build:
+      context: .
+      dockerfile: backend/Dockerfile  # Utilise le Dockerfile personnalisé pour le backend
     container_name: backend
     volumes:
       - ./backend:/var/www/html
+    ports:
+      - "8080:80"
     networks:
       - mynetwork
 
@@ -73,6 +66,20 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - mynetwork
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
+    networks:
+      - mynetwork
 
   ldap:
     image: osixia/openldap:1.5.0
@@ -81,7 +88,6 @@ services:
       LDAP_ORGANISATION: "MyOrg"
       LDAP_DOMAIN: "momo.com"
       LDAP_ADMIN_PASSWORD: admin
-      LDAP_CONFIG_PASSWORD: admin
     ports:
       - "389:389"
       - "636:636"
@@ -95,7 +101,7 @@ services:
       PHPLDAPADMIN_LDAP_HOSTS: "ldap"
       PHPLDAPADMIN_HTTPS: "false"
     ports:
-      - "8081:80"
+      - "8082:80"
     networks:
       - mynetwork
 
@@ -107,43 +113,46 @@ networks:
     driver: bridge
 EOL
 
-# Créer un fichier HTML pour le front-end
-echo "Création du fichier front-end..."
-cat <<EOL > ~/myapp/frontend/index.html
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon application</title>
-</head>
-<body>
-    <h1>Bienvenue sur l'interface utilisateur</h1>
-    <p>Voici une application qui utilise Docker.</p>
-</body>
-</html>
-EOL
-
-# Créer un fichier PHP pour le back-end
-echo "Création du fichier back-end..."
+# Créer le répertoire backend et ajouter le fichier PHP de test
+echo "Création du répertoire backend et ajout du fichier PHP de test..."
+mkdir -p ~/myapp/backend
 cat <<EOL > ~/myapp/backend/index.php
 <?php
 // Connexion à MySQL
-$mysqli = new mysqli("mysql", "root", "rootpassword", "userdb");
+\$mysqli = new mysqli("mysql", "root", "rootpassword", "userdb");
 
-if ($mysqli->connect_error) {
-    die("Échec de la connexion MySQL : " . $mysqli->connect_error);
+if (\$mysqli->connect_error) {
+    die("Échec de la connexion MySQL : " . \$mysqli->connect_error);
 }
 echo "Connexion MySQL réussie.<br>";
 
 // Connexion à LDAP
-$ldapconn = ldap_connect("ldap://ldap") or die("Impossible de se connecter à LDAP");
+\$ldapconn = ldap_connect("ldap://ldap") or die("Impossible de se connecter à LDAP");
 
-if ($ldapconn) {
+if (\$ldapconn) {
     echo "Connexion LDAP réussie.<br>";
-    ldap_close($ldapconn);
+    ldap_close(\$ldapconn);
 }
 ?>
+EOL
+
+# Créer le Dockerfile pour le backend
+echo "Création du fichier Dockerfile pour le backend..."
+mkdir -p ~/myapp/backend
+cat <<EOL > ~/myapp/backend/Dockerfile
+# Utiliser l'image php:7.4-apache de base
+FROM php:7.4-apache
+
+# Installer les dépendances nécessaires pour MySQLi et LDAP
+RUN apt-get update && apt-get install -y \
+    libldap2-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql ldap
+
+# Activer l'extension MySQLi et LDAP
+RUN docker-php-ext-enable mysqli ldap
+
+# Exposer le port 80
+EXPOSE 80
 EOL
 
 # Naviguer dans le répertoire de l'application
@@ -153,7 +162,7 @@ cd ~/myapp
 echo "Démarrage des services Docker..."
 sudo docker-compose up -d
 
-# Attendre quelques secondes pour s'assurer que les conteneurs sont lancés
+# Attendre quelques secondes pour que les services se lancent correctement
 sleep 10
 
 # Ajouter l'utilisateur LDAP "filou"
@@ -171,5 +180,11 @@ EOF
 echo "Les services suivants sont en cours d'exécution :"
 sudo docker-compose ps
 
-# URL de phpLDAPadmin
-echo "phpLDAPadmin est disponible à l'adresse http://localhost:8081"
+# Afficher l'URL pour accéder à phpMyAdmin
+echo "Vous pouvez accéder à phpMyAdmin via l'URL suivante : http://localhost:8081"
+
+# Afficher l'URL pour accéder à phpLDAPadmin
+echo "Vous pouvez accéder à phpLDAPadmin via l'URL suivante : http://localhost:8082"
+
+# Afficher l'URL pour accéder à votre backend PHP
+echo "Vous pouvez accéder à votre application PHP via l'URL suivante : http://localhost:8080"
