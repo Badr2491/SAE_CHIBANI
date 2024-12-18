@@ -1,0 +1,85 @@
+/* Réinitialisation des marges et paddings pour tous les éléments */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #6c63ff, #5743c3); /* Gradient de fond pour un effet dynamique */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteneur principal */
+/* Ajoutez un centrage parfait pour les champs du formulaire */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 30px;
+    margin: auto; /* Centrer le conteneur */
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: translateY(-50px); /* Animation de levitation */
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px; /* Un peu plus d'espace entre les champs */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #5743c3;
+}
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #5743c3;
+}
+
+/* Espacement entre les éléments et une meilleure hiérarchisation du contenu */
+p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #333;
+}

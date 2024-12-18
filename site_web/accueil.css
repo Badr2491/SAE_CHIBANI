@@ -1,0 +1,58 @@
+/* Style global */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5; /* Couleur de fond douce */
+    color: #333; /* Texte principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Conteneur principal */
+.welcome-container {
+    background-color: #fff; /* Fond blanc */
+    border-radius: 12px; /* Coins arrondis */
+    padding: 40px 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Titre principal */
+.welcome-container h1 {
+    color: #2c3e50; /* Bleu sombre */
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Texte descriptif */
+.welcome-container p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555; /* Gris doux */
+    margin-bottom: 30px;
+}
+
+/* Bouton de déconnexion */
+.btn-secondary {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #e74c3c; /* Rouge vif */
+    color: #fff; /* Texte en blanc */
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Effets au survol du bouton */
+.btn-secondary:hover {
+    background-color: #c0392b; /* Rouge plus foncé */
+    transform: scale(1.05); /* Légère mise en avant */
+}
