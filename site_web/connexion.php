@@ -1,38 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="papa.css">
-    <script src="intranet.js"></script> <!-- Lien vers votre fichier JavaScript -->
-</head>
-<body>
-    <div class="container"> <!-- Conteneur ajouté pour centrer -->
-        <form action="connexion.php" method="POST">
-            <label for="username">Nom d'utilisateur:</label>
-            <input type="text" id="username" name="username" required><br><br>
-
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password" required><br><br>
-
-            <input type="submit" value="Se connecter">
-        </form>
-        <p>Pas encore de compte ? <a href="enreigstrement.php">S'inscrire</a></p>
-    </div> <!-- Fermeture du conteneur -->
-</body>
-</html>
- 
-
 <?php
 session_start(); // Démarre la session
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Connexion à la base de données
-    $servername = "localhost";
+    $servername = "mysql:3306";
     $username = "root";
-    $password = "";
+    $password = "rootpassword";
     $dbname = "compte_db";
 
     // Créer une connexion
@@ -47,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    // Debug: afficher les valeurs soumises
-    var_dump($_POST); // Affiche les données envoyées par le formulaire
+    // Suppression du var_dump, car il envoie déjà une sortie au navigateur
+    // var_dump($_POST); // Affiche les données envoyées par le formulaire
 
     // Recherche de l'utilisateur dans la base de données
     $sql = "SELECT * FROM utilisateurs WHERE username = '$user'";
@@ -77,3 +51,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close();
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="papa.css">
+    <script src="intranet.js"></script> <!-- Lien vers votre fichier JavaScript -->
+</head>
+<body>
+    <div class="container"> <!-- Conteneur ajouté pour centrer -->
+        <form action="connexion.php" method="POST">
+            <label for="username">Nom d'utilisateur:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <input type="submit" value="Se connecter">
+        </form>
+        <p>Pas encore de compte ? <a href="enreigstrement.php">S'inscrire</a></p>
+    </div> <!-- Fermeture du conteneur -->
+</body>
+</html>
